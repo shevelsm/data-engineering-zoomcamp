@@ -13,7 +13,7 @@ from sqlalchemy import create_engine
 
 def main(params):
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
-    
+
     user = params.user
     password = params.password
     host = params.host 
@@ -32,9 +32,6 @@ def main(params):
 
     df = next(df_iter)
 
-    df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
-    df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
-
     df.head(n=0).to_sql(name=table_name, schema=schema_name, con=engine, if_exists='replace')
 
     df.to_sql(name=table_name, schema=schema_name, con=engine, if_exists='append')
@@ -42,14 +39,8 @@ def main(params):
 
     while True: 
         t_start = time()
-
         df = next(df_iter)
-
-        df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
-        df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
-
         df.to_sql(name=table_name, schema=schema_name, con=engine, if_exists='append')
-
         t_end = time()
 
         logging.info('inserted another chunk, took %.3f second' % (t_end - t_start))
@@ -63,7 +54,7 @@ if __name__ == '__main__':
     parser.add_argument('--host', required=True, help='host for postgres')
     parser.add_argument('--port', required=True, help='port for postgres')
     parser.add_argument('--db', required=True, help='database name for postgres')
-    parser.add_argument('--schema', required=True, help='schema name for postgres')
+    parser.add_argument('--schema', required=True, help='schema name for postgres')    
     parser.add_argument('--table_name', required=True, help='name of the table where we will write the results to')
     parser.add_argument('--url', required=True, help='url of the csv file')
 
