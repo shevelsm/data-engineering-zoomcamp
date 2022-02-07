@@ -2,7 +2,7 @@
 SELECT
 	COUNT(tpep_pickup_datetime)
 FROM
-	yellow_taxi_trips y
+	"de-zoomcamp"."yellow_taxi_trips"
 WHERE
 	CAST(tpep_pickup_datetime AS DATE) = '2021-01-15'
 LIMIT 100;
@@ -13,7 +13,7 @@ SELECT
 	CAST(tpep_pickup_datetime AS DATE) AS DAY, 
 	MAX(tip_amount) AS max_tips
 FROM
-	yellow_taxi_trips
+	"de-zoomcamp"."yellow_taxi_trips"
 GROUP BY
 	CAST(tpep_pickup_datetime AS DATE)
 ORDER BY
@@ -26,34 +26,35 @@ SELECT
 	tz."Zone",
 	COUNT(*) AS cnt 
 FROM
-	yellow_taxi_trips ytt,
-	taxi_zones tz
+	"de-zoomcamp"."yellow_taxi_trips" ytt,
+	"de-zoomcamp"."taxi_zones" tz
 WHERE
-	    ytt."DOLocationID" = tz."LocationID"
-	AND ytt."PULocationID" = (SELECT "LocationID" FROM taxi_zones WHERE "Zone" = 'Central Park')
+	ytt."DOLocationID" = tz."LocationID"
+	AND ytt."PULocationID" = (SELECT "LocationID" FROM "de-zoomcamp".taxi_zones WHERE "Zone" = 'Central Park')
 	AND CAST(ytt.tpep_pickup_datetime AS DATE) = '2021-01-14'
 GROUP BY 
-	"Zone"
+	tz."Zone"
 ORDER BY cnt DESC;
 
 
 SELECT
---	"PULocationID",
+	--	"PULocationID",
 	COALESCE(tz."Zone", 'Unknown'),
---	"DOLocationID",
+	--	"DOLocationID",
 	COALESCE(tz2."Zone", 'Unknown'),
 	AVG(total_amount) AS avg_amount
 FROM
-	yellow_taxi_trips ytt,
-	taxi_zones tz,
-	taxi_zones tz2
+	"de-zoomcamp"."yellow_taxi_trips" ytt,
+	"de-zoomcamp"."taxi_zones" tz,
+	"de-zoomcamp"."taxi_zones" tz2
 WHERE 
 		ytt."PULocationID" = tz."LocationID"
-	AND ytt."DOLocationID" = tz2."LocationID" 
+	AND ytt."DOLocationID" = tz2."LocationID"
 GROUP BY 
 	tz."Zone",
-	tz2."Zone" 
-ORDER BY avg_amount DESC
+	tz2."Zone"
+ORDER BY
+	avg_amount DESC
 LIMIT 2;
---Alphabet City / Unknown	2292.4
---Union Sq / Canarsie	    262.85200000000003
+--Alphabet City	Unknown	2292.4
+--Union Sq	Canarsie	262.85200000000003
