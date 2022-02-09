@@ -49,23 +49,12 @@ def main(params):
 
             df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
             df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
-
-<<<<<<< HEAD
-        df.to_sql(name=table_name, schema=schema_name, con=engine, if_exists='append')
-=======
-            df.to_sql(name=table_name, con=engine, if_exists='append')
->>>>>>> upstream/main
-
+            df.to_sql(name=table_name, schema=schema_name, con=engine, if_exists='append')
             t_end = time()
-
-<<<<<<< HEAD
-        logging.info('inserted another chunk, took %.3f second' % (t_end - t_start))
-=======
-            print('inserted another chunk, took %.3f second' % (t_end - t_start))
->>>>>>> upstream/main
+            logging.info('inserted another chunk, took %.3f second' % (t_end - t_start))
 
         except StopIteration:
-            print("Finished ingesting data into the postgres database")
+            logging.info("Finished ingesting data into the postgres database")
             break
 
 if __name__ == '__main__':
