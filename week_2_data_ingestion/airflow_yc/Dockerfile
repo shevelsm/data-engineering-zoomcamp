@@ -1,3 +1,3 @@
 FROM apache/airflow:2.3.0
 
-RUN pip install pyarrow apache-airflow-providers-yandex
+RUN pip install pyarrow boto3
