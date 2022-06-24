@@ -13,10 +13,6 @@ FROM
 
 
 
--- We need some properties:
--- external_location | varchar        | File system location URI for external table 
--- format            | varchar        | Hive storage format for the table. Possible values: [ORC, PARQUET, AVRO, RCBINARY, RCTEXT, SEQUENCEFILE, JSON, TEXTFILE, CSV]
--- partitioned_by    | array(varchar) | Partition columns   
 -- Create table for yellow taxi data
 CREATE TABLE IF NOT EXISTS hive.ny_taxi.yellow_tripdata (
     VendorID BIGINT,
