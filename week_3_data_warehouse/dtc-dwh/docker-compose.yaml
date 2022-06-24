@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  mariadb:
+    image: mariadb:10.3
+    environment:
+      - MARIADB_RANDOM_ROOT_PASSWORD=yes
+    networks:
+      - dwh-network
+    ports:
+      - "3306:3306"
+    volumes:
+      - dtc-mariadb-volume:/var/lib/mysql
+      - ./mariadb/init-metastore-db.sql:/docker-entrypoint-initdb.d/init-metastore-db.sql
+
+  hive-metastore:
+    build: ./metastore
+    depends_on:
+      - mariadb
+    networks:
+      - dwh-network
+
+  trino:
+    container_name: trino-dwh
+    image: trinodb/trino:383
+    networks:
+      - dwh-network
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./trino/etc:/etc/trino:ro
+
+volumes:
+  dtc-mariadb-volume:
+
+
+networks:
+  dwh-network:
+    driver: bridge
